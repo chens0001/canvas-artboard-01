@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        // 初始化canva 宽高
+        canvas.width = document.documentElement.clientWidth;
+        canvas.height = document.documentElement.clientHeight;
+        const ctx = canvas.getContext("2d");
+        
+        let isPainting = false;
+        let prevPostion = [];
+        ctx.fillStyle = "black";
+        ctx.strokeStyle = 'none'
+        ctx.lineCap = 'round';
+        ctx.lineWidth = 10;
+        canvas.onmousedown = (e) => {
+            isPainting = true;
+            prevPostion = [e.clientX, e.clientY];
+        }
+
+        canvas.onmousemove = (e) => {
+            if (isPainting === true) {
+                ctx.beginPath();
+                ctx.moveTo(prevPostion[0], prevPostion[1]);
+                ctx.lineTo(e.clientX, e.clientY);
+                ctx.stroke();
+                ctx.fill();
+                prevPostion = [e.clientX, e.clientY];
+            } else {
+                console.log('什么都不做')
+            }
+        }
+
+        canvas.onmouseup = () => {
+            isPainting = false
+        }
+
+    </script>
+</body>
+</html>
