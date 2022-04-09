@@ -11,6 +11,7 @@
     <canvas id="canvas"></canvas>
     <script>
         const canvas = document.getElementById("canvas");
+        const isTouchDevice = 'ontouchstart' in document.documentElement;
         // 初始化canva 宽高
         canvas.width = document.documentElement.clientWidth;
         canvas.height = document.documentElement.clientHeight;
@@ -26,19 +27,34 @@
             isPainting = true;
             prevPostion = [e.clientX, e.clientY];
         }
-
-        canvas.onmousemove = (e) => {
-            if (isPainting === true) {
+        if(isTouchDevice) {
+            
+            canvas.ontouchmove = (e) => {
+                isPainting = true;
+                console.log('111')
                 ctx.beginPath();
                 ctx.moveTo(prevPostion[0], prevPostion[1]);
-                ctx.lineTo(e.clientX, e.clientY);
+                ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
                 ctx.stroke();
                 ctx.fill();
-                prevPostion = [e.clientX, e.clientY];
-            } else {
-                console.log('什么都不做')
+                prevPostion = [e.touches[0].clientX, e.touches[0].clientY];
             }
+
+        } else {
+            canvas.onmousemove = (e) => {
+                if (isPainting === true) {
+                    ctx.beginPath();
+                    ctx.moveTo(prevPostion[0], prevPostion[1]);
+                    ctx.lineTo(e.clientX, e.clientY);
+                    ctx.stroke();
+                    ctx.fill();
+                    prevPostion = [e.clientX, e.clientY];
+                } else {
+                    console.log('什么都不做')
+                }   
+            }   
         }
+        
 
         canvas.onmouseup = () => {
             isPainting = false
